@@ -1,2 +1,5 @@
 .env
 led_model
+xlm_robert_model
+tokenizer_cache
+mlruns
