@@ -1,5 +1,7 @@
 .env
 led_model
-xlm_robert_model
 tokenizer_cache
 mlruns
+kaggle.json
+xlm_robert_model
+xlm_robert_model_1
