@@ -3,3 +3,4 @@ led_model
 xlm_robert_model
 tokenizer_cache
 mlruns
+text_save_model
