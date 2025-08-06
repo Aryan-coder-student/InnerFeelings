@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Client</string>
+	<string>Flutter Application 1</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>client</string>
+	<string>flutter_application_1</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -45,5 +45,13 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>We need camera access to capture photos for your journal.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need microphone access to record voice for your journal.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need photo library access to save captured photos.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need photo library access to select photos for your journal.</string>
 </dict>
 </plist>
