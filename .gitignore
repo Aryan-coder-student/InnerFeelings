@@ -1,2 +1,10 @@
 .env
 led_model
+tokenizer_cache
+mlruns
+kaggle.json
+text_save_model
+ravdess_emotional_speech_audio
+xlm_robert_model
+data
+Voice_model
