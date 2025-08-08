@@ -1,7 +1,10 @@
 import os
 from huggingface_hub import InferenceClient
 
-client = InferenceClient(api_key="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")
+with open('hfapikey.txt', 'r') as f:
+    api_key = f.read().strip() 
+
+client = InferenceClient(api_key=api_key)
 
 image = client.text_to_image(
     prompt="A serene lake surrounded by mountains at sunset, photorealistic style",
