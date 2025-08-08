@@ -68,5 +68,51 @@ The response returns a JSON object with:
 - You can interact with the endpoint via HTTP clients like cURL or Postman.
 - The model performs chunking on inputs longer than 512 characters internally.
 
-***
 
+### 2. Voice Emotion Classification
+
+#### POST `/voice/post`
+
+This endpoint accepts an audio file (e.g., WhatsApp audio, `.opus`, or `.ogg`) and returns scores for various emotions detected in the voice sample.
+
+**Request:**
+- **Content-Type:** `multipart/form-data`
+- **Body:** File upload (`file` parameter)
+
+**Example cURL:**
+```
+curl -X 'POST' \
+  'http://127.0.0.1:8000/voice/post' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: multipart/form-data' \
+  -F "file=@WhatsApp Audio 2025-08-03 at 10.12.54_29098a5c.wa.opus;type=audio/ogg"
+```
+
+**Response Example:**
+```
+{
+  "Anger": 0.0,
+  "Calm": 0.007,
+  "Disgust": 0.005,
+  "Fear": 0.001,
+  "Happy": 0.004,
+  "Neutral": 0.981,
+  "Sad": 0.0,
+  "Surprised": 0.001
+}
+```
+
+**Response Interpretation:**
+- Each field represents the detected probability or score for a particular emotion. In the above response, `"Neutral"` dominates, indicating a neutral emotional tone.
+
+---
+
+
+## Example Images
+
+![alt text](image-4.png)
+![alt text](image-5.png)
+
+- 
+
+---
