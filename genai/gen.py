@@ -24,6 +24,8 @@ check if the image is upto the mark with the text description, the text is clear
 If the image is not upto the mark, 
             
 """
+
+
 def generate_image(text_description: str, audio_description_path: str = None, video_description_path: str = None):
     """
     Basically what we are gonna do is take the suitable description and convert into suitable prompt for the comic style image generation,
@@ -91,41 +93,34 @@ Don't add any comic bubbles or text to the image, just generate the image based 
         print("API key file not found. Please ensure 'apikey.txt' exists with your API key.")
 
 
-journal = """**Daily Journal Entry - Friday, August 8th, 2025**
+journal = """
 
----
+Daily Journal Entry - Friday, August 8th, 2025
 
-**Morning (7:30 AM)**
+Morning (7:30 AM)
 Woke up to the sound of rain pattering against my window. Usually I'd be annoyed, but today it felt peaceful somehow. Made my usual coffee and sat by the kitchen counter watching the droplets race down the glass. There's something meditative about rainy mornings that makes everything feel slower and more intentional.
 
-**Mid-Morning (10:15 AM)**
+Mid-Morning (10:15 AM)
 Had that video call with Sarah about the project deadline. She seemed stressed, but we managed to break down the tasks into manageable chunks. I actually felt pretty confident presenting my ideas - usually I second-guess myself in meetings, but today the words just flowed. Maybe it was the calming rain energy carrying over.
 
-**Lunch Time (12:45 PM)**
+Lunch Time (12:45 PM)
 Tried making that Thai curry recipe I bookmarked weeks ago. It turned out way spicier than expected! My eyes were watering but I was laughing at myself the whole time. Called Mom while cooking and she could hear me coughing through the phone. She reminded me that Dad always says "if it doesn't make you sweat, it's not worth eating."
 
-**Afternoon (3:20 PM)**
+Afternoon (3:20 PM)
 The rain stopped and the sun came out just as I was feeling that post-lunch energy dip. Decided to take a walk around the neighborhood instead of reaching for more coffee. Saw Mrs. Chen tending to her garden - her tomatoes are huge this year. We chatted over the fence about her secret composting method. Made a mental note to start my own little herb garden on the balcony.
 
-**Evening (7:00 PM)**
+Evening (7:00 PM)
 Finished reading that mystery novel I've been working on for two weeks. The ending was completely unexpected - I actually gasped out loud, which made my cat Luna give me the most judgmental look. Ordered pizza because after the spicy curry experiment, I needed something safe and familiar.
 
-**Night (9:30 PM)**
+Night (9:30 PM)
 Face timed with Jake to catch up. He showed me his new apartment in Portland - it's tiny but has this amazing view of the mountains. We ended up talking for almost two hours about everything and nothing. It's funny how distance makes you appreciate good friends even more.
 
-**Before Bed (11:00 PM)**
+Before Bed (11:00 PM)
 Feeling grateful today. Not for anything huge or life-changing, just for small moments that made me smile. The rain, a successful curry disaster, Mrs. Chen's gardening wisdom, Luna's attitude, Jake's laugh through the screen. Sometimes the ordinary days are the ones that remind you life is pretty good.
-
----
-
-**Mood: Content and reflective**
-**Weather: Rainy morning, sunny afternoon**  
-**Highlight: Unexpected confidence in the work meeting**
-**Tomorrow's Goal: Research balcony herb garden setup**
 
 """
 
-generate_image(journal)
+#generate_image(journal)
 
 def ti2i(text_input: str, image_path: str):
     image_path = PIL.Image.open('images/image1.png')
@@ -149,6 +144,5 @@ def ti2i(text_input: str, image_path: str):
         elif part.inline_data is not None:
             image = Image.open(BytesIO((part.inline_data.data)))
             image.show()
-            image.save(f"image .png")
-
-
+            image.save(f"image.png")
+            
