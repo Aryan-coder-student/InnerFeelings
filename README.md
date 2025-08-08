@@ -1,4 +1,4 @@
-# Journal Text Sentiment Analysis
+# Journal Text Sentiment and Voice Sentiment Analysis
 
 
 ## API Endpoint
