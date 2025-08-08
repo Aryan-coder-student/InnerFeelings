@@ -1,4 +1,4 @@
-# Journal Text Sentiment Analysis
+# Journal Text Sentiment and Voice Sentiment Analysis
 
 
 ## API Endpoint
@@ -58,10 +58,10 @@ The response returns a JSON object with:
 
 ***
 
-## Example Images
+## Example Images<img width="1816" height="927" alt="Screenshot 2025-08-08 120809" src="https://github.com/user-attachments/assets/e23e62ab-19bd-4a3a-bdf7-95e216d690d1" />
 
-![alt text](image-2.png)
-![alt text](image-3.png)
+
+<img width="1825" height="885" alt="Screenshot 2025-08-08 120757" src="https://github.com/user-attachments/assets/d7499fac-9e75-4113-8c38-b7fdbbeb213b" />
 
 - The model expects journal text input and outputs sentiment scores across emotions: sadness, joy, love, anger, fear, surprise.
 - The API runs locally at `http://127.0.0.1:8000`.
@@ -109,9 +109,9 @@ curl -X 'POST' \
 
 
 ## Example Images
+<img width="1812" height="924" alt="Screenshot 2025-08-08 160400" src="https://github.com/user-attachments/assets/cde353cb-c8a5-4ee1-82ab-bade7e5fad64" />
 
-![alt text](image-4.png)
-![alt text](image-5.png)
+<img width="1830" height="802" alt="Screenshot 2025-08-08 160623" src="https://github.com/user-attachments/assets/59581bc4-aed3-4424-8a7f-0e4efc39228b" />
 
 - 
 
