@@ -4,3 +4,5 @@ xlm_robert_model
 tokenizer_cache
 mlruns
 text_save_model
+genai/apikey.txt
+genai/hfapikey.txt
