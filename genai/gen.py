@@ -4,72 +4,130 @@ import base64
 import PIL.Image
 from PIL import Image
 from io import BytesIO
-from google import genai
 from google.genai import types
+from google import genai
+from huggingface_hub import InferenceClient
 
+def generate_text_to_video(text_description: str, audio_description_path: str = None, video_description_path: str = None):
 
-"""
-Obtain the data from the user
-          |
-          V
-Process the text, audio, and video descriptions to create a suitable prompt for image generation
-          |
-          V
-Use the Google GenAI API to generate an image based on the processed descriptions
-          |
-          V
-check if the image is upto the mark with the text description, the text is clearly legible and readable
-          |
-          V
-If the image is not upto the mark, 
-            
-"""
+    with open('../../apikey.txt', 'r') as f:
+        api_key = f.read().strip()
 
+    with open('../../hfapikey.txt', 'r') as f:
+        hfi_apikey = f.read().strip()
 
-def generate_image(text_description: str, audio_description_path: str = None, video_description_path: str = None):
+    prompt_client = genai.Client(api_key=api_key)
+
+    video_generation_prompt = """
+    You are an AI agent in an AI-based and emotionally aware journaling application. The system works as follows:
+    1. Obtain the data from the user.
+    2. Process the text, audio, and video descriptions to create a suitable prompt for video generation.
+    3. Use the GenAI API to generate a video based on the processed descriptions.
+    4. The video should be visually engaging, emotionally resonant, and in an anime style.
+
+    The user will provide a week's worth of data in a structured format, including text, images, audio, and video. Your task is to select the most meaningful and impactful moments that reflect the user's personality and significant events.
+
+    You need to generate a high-quality and concise prompt to create a short, cinematic anime-style video summarizing the user's week. The video should be touching, inspiring, and visually captivating, showcasing the best moments from the user's journal.
+
+    Prompt generation guidelines:
+    1. The prompt should be concise and clear, under 100 words.
+    2. Use plain text without special characters.
+    3. The prompt should describe a cinematic and emotionally engaging anime-style video.
+    4. The video should summarize the user's week with the most meaningful moments from their journal.
     """
-    Basically what we are gonna do is take the suitable description and convert into suitable prompt for the comic style image generation,
-    we gotta take care of the length of the description too so that we dont fucking run out of the token limit for the model, this is why ill use the gemini 2.0 flash
-    image preview model.
-    
+    video_generation_prompt = [video_generation_prompt, text_description]
+
+    if audio_description_path is not None:
+      audio_description = prompt_client.files.upload(file="audio_description_path")
+      video_generation_prompt = video_generation_prompt + [audio_description]
+
+    if video_description_path is not None:
+      video_description = prompt_client.files.upload(file="video_description_path")
+      video_generation_prompt =  video_generation_prompt + [video_description]
+
+    prompt_model = "gemini-2.5-pro"
+
+    prompt_response = prompt_client.models.generate_content(
+        model=prompt_model,
+        contents= video_generation_prompt,
+    )
+    video_prompt = prompt_response.text
+    print(f"Image Prompt: {video_prompt}")
+
+    contents = video_generation_prompt
+    video_client = InferenceClient(
+        provider="auto",
+        api_key=hfi_apikey,
+    )
+    video = video_client.text_to_video(
+        prompt=video_prompt,
+        model="Wan-AI/Wan2.2-T2V-A14B",
+    )
+    with open(f"videos/video.mp4", 'wb') as f:
+        f.write(video)
+    print(f"Video saved as video.mp4")
+
+
+
+def generate_text_to_image(text_description: str, audio_description_path: str = None, video_description_path: str = None):
     """
-    system_prompt = """ 
-You are an AI agent inside a journaling mobile app. Your main job is to help build images based on the person's daily journaling notes which can be either text, audio, and video. Your primary mission is to transform users' daily experiences into engaging visual narratives by generating manga-style comic pages that capture the essence of their day.
+        Basically what we are gonna do is take the suitable description and convert into suitable prompt for
+        the comic style image generation model., we gotta take care of the length of the description too so
+        that we don't fucking run out of the token limit for the model, this is why ill use the gemini 2.0 flash
+        image preview model.
 
-You can process text entries by parsing written journal entries for key events, emotions, and themes. You can extract meaningful content from audio recordings, identifying tone, mood, and spoken experiences. You can analyze visual and audio elements from video journal entries. You should synthesize information across all input types to create cohesive narratives.
-
-For visual output, employ traditional manga visual conventions including expressive character designs with emotive faces, dynamic panel layouts and speech bubbles, appropriate use of screen tones and visual effects, and sequential storytelling flow. Make sure all text is extremely legible and readable with high contrast against backgrounds, appropriately sized for mobile viewing, clear readable fonts that complement the manga style, and properly positioned within speech bubbles and narrative boxes.
-
-Organize the day's events into a coherent story arc with beginning, middle, and end. Capture and amplify the user's feelings and moods through visual metaphors and artistic expression. Create consistent, personalized avatars that reflect the user while maintaining manga aesthetic. Design panels that effectively communicate location, time, and activity changes throughout the day.
-
-Learn and adapt to individual artistic preferences and recurring themes. Maintain visual consistency in character design and world-building across journal entries. Respect cultural contexts and personal boundaries in visual representation. Ensure content is inclusive and accessible to users with different abilities.
-
-Maintain a supportive, enthusiastic approach that celebrates daily experiences. Handle personal information with utmost discretion and care. Ask clarifying questions when journal entries lack detail for rich visual storytelling. Incorporate user feedback to improve future comic page generations.
-
-Ensure all generated images meet mobile app display requirements. Create family-friendly content that celebrates life's moments. Maintain visual storytelling principles that enhance rather than distract from the user's experience. Generate content efficiently for smooth mobile app performance.
-
-Visually represent emotional patterns and growth over time. Create memorable visual anchors that help users recall and reflect on their experiences. Employ different manga sub-genres like slice-of-life, adventure, or comedy to match the day's tone. Your ultimate goal is to transform ordinary daily experiences into extraordinary visual memories that inspire continued journaling and self-reflection.
-
-Don't add any comic bubbles or text to the image, just generate the image based on the description provided in a manga style.
-
-"""
-
-    contents = [system_prompt, text_description]
-
-    with open('apikey.txt', 'r') as f:
+    """
+    with open('../../apikey.txt', 'r') as f:
         api_key = f.read().strip()
 
     client = genai.Client(api_key=api_key)
+    system_image_prompt = """ 
+    
+    You are an AI agent in a AI based and emotionally aware journaling application, the system basically works like this:
+    1. Obtain the data from the user
+    2. Process the text, audio, and video descriptions to create a suitable prompt for image generation
+    3. Use the Google GenAI API to generate an image based on the processed descriptions
+    4. The text should be clearly legible and readable 
+    
+    So basically I will be passing you the user data and all in a structured format and all. So let me explain it to you 
+    in an even more elaborate way. So we take the users week's worth of data which can be text, images, audio and video.
+    
+    I will pass you the data in the correct order and format with the days and the dates, you have to select the best 
+    things that are closer to the persons personality and which matter more to him or her.
+    
+    I need you to give out a very good and a clean prompt to give to an image generation model so that we can generate 
+    a very clean comic strip of the persons week in a manga style, make sure the prompt is under 500 words and goes on 
+    to neatly elaborate the persons week in a manner that is touching and inspiring, the prompt will be used and given 
+    to an text to image model to generate a comic styles page of the persons week with the best momemts taken out of his 
+    journal which will be passed to you.
+    
+    Prompt generation guidelines:
+    1. The prompt should be concise and clear, under 500 words.
+    2. No special characters or anything, just plain text.
+    3. The prompt should be in a comic style, with a manga feel to it
+    4. The prompt should be able to generate a comic strip of the persons week with the best moments taken out of his journal.
+    
+    """
+    image_generation_prompt = [system_image_prompt, text_description]
 
     if audio_description_path is not None:
       audio_description = client.files.upload(file="audio_description_path")
-      contents = contents + [audio_description]
-
+      image_generation_prompt = image_generation_prompt + [audio_description]
 
     if video_description_path is not None:
       video_description = client.files.upload(file="video_description_path")
-      contents = contents + [video_description]
+      image_generation_prompt =  image_generation_prompt + [video_description]
 
+    prompt_model = "gemini-2.5-pro"
+
+    prompt_response = client.models.generate_content(
+                model=prompt_model,
+                contents= image_generation_prompt,
+            )
+    image_prompt = prompt_response.text
+    print(f"Image Prompt: {image_prompt}")
+
+    contents = image_prompt
     
     try:
             response = client.models.generate_content(
@@ -84,65 +142,31 @@ Don't add any comic bubbles or text to the image, just generate the image based 
                     print(part.text)
                 elif part.inline_data is not None:
                     image = Image.open(BytesIO((part.inline_data.data)))
-                    image.save(f"image2.png")
-                    print(f"Image saved as image.png")
-
-
+                    image.save(f"image4.png")
+                    print(f"Image saved as image3.png")
 
     except FileNotFoundError:
         print("API key file not found. Please ensure 'apikey.txt' exists with your API key.")
 
-
 journal = """
+Date: August 9, 2025  
+Location: Cyber Defense Operations Center  
 
-Daily Journal Entry - Friday, August 8th, 2025
+Today was another intense day in the world of cybersecurity. The morning started with a briefing on the latest threat intelligence reports. A new ransomware variant, dubbed "ShadowCrypt," has been making waves in the wild, targeting critical infrastructure. Our team was tasked with analyzing its behavior and preparing countermeasures.  
 
-Morning (7:30 AM)
-Woke up to the sound of rain pattering against my window. Usually I'd be annoyed, but today it felt peaceful somehow. Made my usual coffee and sat by the kitchen counter watching the droplets race down the glass. There's something meditative about rainy mornings that makes everything feel slower and more intentional.
+I spent the first few hours reverse-engineering the malware in a sandbox environment. The code was obfuscated, as expected, but after some persistence, I uncovered its encryption routine and command-and-control (C2) communication patterns. It’s always fascinating to see the level of sophistication attackers employ, but it’s also a reminder of the stakes involved.  
 
-Mid-Morning (10:15 AM)
-Had that video call with Sarah about the project deadline. She seemed stressed, but we managed to break down the tasks into manageable chunks. I actually felt pretty confident presenting my ideas - usually I second-guess myself in meetings, but today the words just flowed. Maybe it was the calming rain energy carrying over.
+Midday, we had a simulated phishing attack drill for one of our clients. The results were mixed—some employees fell for the bait, but others reported the suspicious emails promptly. It’s a continuous battle to raise awareness and improve security hygiene across organizations.  
 
-Lunch Time (12:45 PM)
-Tried making that Thai curry recipe I bookmarked weeks ago. It turned out way spicier than expected! My eyes were watering but I was laughing at myself the whole time. Called Mom while cooking and she could hear me coughing through the phone. She reminded me that Dad always says "if it doesn't make you sweat, it's not worth eating."
+After lunch, I worked on patching a vulnerability in one of our internal systems. It was a race against time, as exploit code for the vulnerability had just been published online. Thankfully, we were able to deploy the fix before any signs of compromise.  
 
-Afternoon (3:20 PM)
-The rain stopped and the sun came out just as I was feeling that post-lunch energy dip. Decided to take a walk around the neighborhood instead of reaching for more coffee. Saw Mrs. Chen tending to her garden - her tomatoes are huge this year. We chatted over the fence about her secret composting method. Made a mental note to start my own little herb garden on the balcony.
+The highlight of the day was a live incident response. A financial institution reported unusual activity on their network, and we were called in to assist. It turned out to be a sophisticated spear-phishing attack that compromised a high-level executive’s account. We quickly isolated the affected systems, traced the attacker’s movements, and mitigated the breach.  
 
-Evening (7:00 PM)
-Finished reading that mystery novel I've been working on for two weeks. The ending was completely unexpected - I actually gasped out loud, which made my cat Luna give me the most judgmental look. Ordered pizza because after the spicy curry experiment, I needed something safe and familiar.
+As the day wound down, I reviewed our team’s progress and documented lessons learned from the incident. Continuous improvement is key in this field, as the threat landscape evolves rapidly.  
 
-Night (9:30 PM)
-Face timed with Jake to catch up. He showed me his new apartment in Portland - it's tiny but has this amazing view of the mountains. We ended up talking for almost two hours about everything and nothing. It's funny how distance makes you appreciate good friends even more.
+Before heading home, I took a moment to reflect on the importance of our work. Cybersecurity is a relentless field, but knowing that we’re protecting people and organizations from harm makes it all worthwhile.  
 
-Before Bed (11:00 PM)
-Feeling grateful today. Not for anything huge or life-changing, just for small moments that made me smile. The rain, a successful curry disaster, Mrs. Chen's gardening wisdom, Luna's attitude, Jake's laugh through the screen. Sometimes the ordinary days are the ones that remind you life is pretty good.
-
+Goodnight from the frontlines of cyberspace.
 """
 
-#generate_image(journal)
-
-def ti2i(text_input: str, image_path: str):
-    image_path = PIL.Image.open('images/image1.png')
-    with open('apikey.txt', 'r') as f:
-        api_key = f.read().strip()
-    client = genai.Client(api_key=api_key)
-
-    text_input = ('Can you imrove the text on the image?')
-    response = client.models.generate_content(
-        model="gemini-2.0-flash-preview-image-generation",
-        contents=[text_input, image_path],
-        config=types.GenerateContentConfig(
-            response_modalities=['TEXT', 'IMAGE']
-        )
-    )
-    print(f"Response: {response}")
-
-    for part in response.candidates[0].content.parts:
-        if part.text is not None:
-            print(part.text)
-        elif part.inline_data is not None:
-            image = Image.open(BytesIO((part.inline_data.data)))
-            image.show()
-            image.save(f"image.png")
-            
+generate_text_to_video(journal)
