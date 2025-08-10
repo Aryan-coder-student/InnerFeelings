@@ -1,0 +1,26 @@
+Obtain the data from the user
+          |
+          V
+Process the text, audio, and video descriptions to create a suitable prompt for image generation
+          |
+          V
+Use the Google GenAI API to generate an image based on the processed descriptions
+          |
+          V
+check if the image is upto the mark with the text description, the text is clearly legible and readable
+          |
+          V
+If the image is not upto the mark, it will try to improve the image and make it more readable.
+          |
+          V
+If the image is satisfactory, it will be saved and returned to the user
+
+
+
+Image models i can use(HF):
+
+1. Qwen/Qwen-Image
+2. black-forest-labs/FLUX.1-dev
+3. black-forest-labs/FLUX.1-Krea-dev
+4. stabilityai/stable-diffusion-3.5-large
+5. gemini-2.0-flash-preview-image-generation(Google)

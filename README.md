@@ -200,5 +200,75 @@ The response returns a JSON object with your metrics, detected sentiment, and pe
 ![alt text](image-1.png)
 
 
+# Text-to-Video Generation API
+
+### POST `/genai_tool/text-to-video`
+
+This endpoint creates a video clip from a textual description, supporting cinematic or narrative prompts (e.g., for anime scenes, cinematic sequences, or story visualization).
+
+#### Request
+
+- **Content-Type:** `application/x-www-form-urlencoded`
+- **Body:**  
+  - `text_description` (string): The prompt describing the scenario, scene, or script you want visualized as a video.
+
+```json
+{
+  "text_description": "Cinematic anime style. An astronaut glides weightlessly through the ISS, beginning with a breathtaking sunrise over Earth's curve. Quick, warm scenes: tending to glowing plants in a lab, sharing a laugh with a crewmate. The emotional peak is a quiet, awe-filled moment watching the swirling blue and white planet from the Cupola observation deck. Capture the serene wonder, camaraderie, and profound beauty of a day in orbit. End with a peaceful shot of the astronaut journaling as stars drift by."
+}
+```
+
+#### Example cURL Command
+
+```bash
+curl -X 'POST' \
+  'http://127.0.0.1:8000/genai_tool/text-to-video' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -d 'text_description=Today started like any other day in space, with the sunrise—a well-worn scene for the sixteen we experience each day up here. Making our way through the morning checklist on the ISS, tending to plants, peering down at the blue marble. I laughed with my crewmate over our growing experiment, and as we watched the Earth swirl below from the Cupola, it hit me: awe, peace, a reminder of why I journal. Tonight, I'll watch the stars drift by."
+```
+
 ***
+
+## Response
+
+The response is a JSON object indicating status and providing a path to the generated video.
+
+### Example Response
+
+```
+{
+  "status": "success",
+  "video_path": "artifacts\\videos\\video.mp4",
+  "prompt": "Cinematic anime style. An astronaut glides weightlessly through the ISS, beginning with a breathtaking sunrise over Earth's curve. Quick, warm scenes: tending to glowing plants in a lab, sharing a laugh with a crewmate. The emotional peak is a quiet, awe-filled moment watching the swirling blue and white planet from the Cupola observation deck. Capture the serene wonder, camaraderie, and profound beauty of a day in orbit. End with a peaceful shot of the astronaut journaling as stars drift by.",
+  "model": "Man-AI/Mana2.2-T2V-A14B"
+}
+```
+
+### Explanation
+
+- **status**: Indicates if the operation succeeded.
+- **video_path**: Relative path to the generated video output.
+- **prompt**: The input scene/prompt description used.
+- **model**: The generative model’s identifier.
+
+***
+
+## Example Images
+
+[image:s API is ideal for creating short cinematic or narrative videos from written descriptions.
+- Runs locally at `http://127.0.0.1:8000/` and integrates with any HTTP client.
+- Useful for animation prototyping, storyboarding, or creative experimentation.
+
+***.
+
+![alt text](image-2.png)
+![alt text](image-3.png)
+
+--- 
+Sample Output
+
+<video width="640" height="360" controls>
+  <source src="models/genai/videos/video.mp4" type="video/mp4">
+</video>
 
