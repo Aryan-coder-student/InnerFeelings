@@ -260,13 +260,8 @@ The response is a JSON object indicating status and providing a path to the gene
 ![alt text](image-2.png)
 ![alt text](image-3.png)
 
---- 
-Sample Output
 
-<video width="640" height="360" controls>
-  <source src="models/genai/videos/video.mp4" type="video/mp4">
-</video>
-
+https://github.com/user-attachments/assets/98b7ae9e-ba39-4f2a-9feb-ed52d3e12a69
 ----
 
 # Text-to-Image Generation API
