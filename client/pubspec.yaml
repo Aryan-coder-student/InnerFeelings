@@ -1,4 +1,4 @@
-name: client
+name: flutter_application_1
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -34,7 +34,24 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  table_calendar: ^3.2.0
+  camera: ^0.10.5
+  fl_chart: ^1.0.0
+  share_plus: ^10.0.2
+  record: ^6.0.0
+  # image_picker_for_web: ^3.0.6
+  image_picker: ^1.1.2
+  # flutter_sound: ^9.2.0
+  permission_handler: ^10.2.0
 
+  path_provider: ^2.1.0  # Add if using iOS path (optional)
+  supabase_flutter: ^2.5.8
+  flutter_dotenv: ^5.1.0
+  audioplayers: ^6.1.0
+  file_picker: ^8.0.0
+  # audio_recorder: ^1.0.2
+  # flutter_sound: ^9.28.13  # Use a stable version prior to 9.28.0 if needed
+  # web: ^0.3.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -58,7 +75,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+
+  assets:
+    - .env
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
