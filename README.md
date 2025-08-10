@@ -256,11 +256,6 @@ The response is a JSON object indicating status and providing a path to the gene
 
 ## Example Images
 
-[image:s API is ideal for creating short cinematic or narrative videos from written descriptions.
-- Runs locally at `http://127.0.0.1:8000/` and integrates with any HTTP client.
-- Useful for animation prototyping, storyboarding, or creative experimentation.
-
-***.
 
 ![alt text](image-2.png)
 ![alt text](image-3.png)
@@ -272,3 +267,54 @@ Sample Output
   <source src="models/genai/videos/video.mp4" type="video/mp4">
 </video>
 
+----
+
+# Text-to-Image Generation API
+
+### POST `/genai_tool/text-to-image`
+
+This endpoint creates an image from a textual description, supporting narrative or comic-style prompts for creative visualizations.
+
+#### Request
+
+- **Content-Type:** `application/x-www-form-urlencoded`
+- **Body:**  
+  - `text_description` (string): The prompt describing the scenario or concept you want visualized as an image.
+
+```json
+{
+  "text_description": "Here is your weekly summary, presented as a manga-style comic strip. An astronaut floats peacefully before the large, sweeping window of the ISS. The face, full of quiet awe, is illuminated by the brilliant blue and white swirl of the Earth below..."
+}
+```
+
+#### Example cURL Command
+
+```bash
+curl -X 'POST' \
+  'http://127.0.0.1:8000/genai_tool/text-to-image' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -d 'text_description=Here is your weekly summary, presented as a manga-style comic strip. An astronaut floats peacefully before the large, sweeping window of the ISS. The face, full of quiet awe, is illuminated by the brilliant blue and white swirl of the Earth below...'
+```
+
+***
+
+## Response
+
+The response is a JSON object indicating status and providing a path to the generated image.
+
+### Example Response
+
+```
+{
+  "status": "success",
+  "image_path": "artifacts\\images\\image.png",
+  "prompt": "Here is your weekly summary, presented as a manga-style comic strip...",
+  "model": "gemini-2.0-flash-preview-image-generation"
+}
+```
+
+
+
+## Example Images
+![alt text](models\genai\artifacts\images\image.png)
