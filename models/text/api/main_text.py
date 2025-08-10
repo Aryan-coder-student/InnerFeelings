@@ -27,7 +27,7 @@ class SentimentAnalyzer:
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.model = AutoModelForSequenceClassification.from_pretrained("../text_save_model/xlm_robert_model_3").to(self.device)
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name_or_path, cache_dir="../tokenizer_cache")
-        self.router = APIRouter(prefix="/text")
+        self.router = APIRouter(prefix="/text",tags = ["text"])
         self._add_routes()
 
     def _add_routes(self):
@@ -80,9 +80,3 @@ class PredictRequest(BaseModel):
 
 if __name__ == "__main__":
     analyzer = SentimentAnalyzer()
-
-
-    # If you set up a FastAPI app, include the router:
-    # from fastapi import FastAPI
-    # app = FastAPI()
-    # app.include_router(analyzer.router)
