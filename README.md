@@ -317,4 +317,6 @@ The response is a JSON object indicating status and providing a path to the gene
 
 
 ## Example Images
-![alt text](models\genai\artifacts\images\image.png)
+<img width="434" height="1024" alt="image" src="https://github.com/user-attachments/assets/a5895d4c-3873-428a-8ec8-6d8d7cb105e0" />
+
+
