@@ -260,9 +260,11 @@ The response is a JSON object indicating status and providing a path to the gene
 ![alt text](image-2.png)
 ![alt text](image-3.png)
 
+---
 
-https://github.com/user-attachments/assets/98b7ae9e-ba39-4f2a-9feb-ed52d3e12a69
-----
+
+https://github.com/user-attachments/assets/e09ce68e-e0d1-42b6-b667-58b24cb7a301
+
 
 # Text-to-Image Generation API
 
