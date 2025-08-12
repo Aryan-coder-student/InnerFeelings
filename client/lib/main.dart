@@ -9,6 +9,7 @@ import './src/features/journal.dart';
 import './src/features/avatar.dart';
 import './src/features/community.dart';
 import './src/features/splash_screen.dart';
+import './src/features/habits.dart';
 
 void main() {
   runApp(const InnerFeeling());
@@ -46,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // 'new_entry',
     'journal',
     'avatar',
+    'habits',
     'community'
   ];
 
@@ -139,7 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           _buildNavItem(0, '📊', 'Dashboard'),
                           _buildNavItem(1, '📖', 'Journal'),
                           _buildNavItem(2, '🤖', 'Luna'),
-                          _buildNavItem(3, '👥', 'Community'),
+                          _buildNavItem(3, '🏋️', 'Habits'),
+                          _buildNavItem(4, '👥', 'Community'),
                         ],
                       ),
                     ),
@@ -325,6 +328,8 @@ class _HomeScreenState extends State<HomeScreen> {
         return const JournalPage();
       case 'avatar':
         return const AvatarPage();
+      case 'habits':
+        return const HabitsPage();
       case 'community':
         return const CommunityPage();
       default:
