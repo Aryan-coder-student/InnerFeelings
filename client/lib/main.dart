@@ -8,6 +8,7 @@ import './src/features/journal.dart';
 
 import './src/features/avatar.dart';
 import './src/features/community.dart';
+import './src/features/splash_screen.dart';
 
 void main() {
   runApp(const InnerFeeling());
@@ -21,7 +22,11 @@ class InnerFeeling extends StatelessWidget {
     return MaterialApp(
       title: 'InnerFeeling',
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Roboto'),
-      home: const HomeScreen(),
+      home: const SplashScreen(),
+      routes: {
+        '/home': (context) => const HomeScreen(),
+        '/login': (context) => const HomeScreen(), // For now, redirect to home
+      },
     );
   }
 }
@@ -35,6 +40,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  bool _showFloatingOptions = false;
   final List<String> _pages = [
     'dashboard',
     // 'new_entry',
@@ -46,6 +52,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void _showPage(int index) {
     setState(() {
       _selectedIndex = index;
+    });
+  }
+
+  void _toggleFloatingOptions() {
+    setState(() {
+      _showFloatingOptions = !_showFloatingOptions;
     });
   }
 
@@ -133,26 +145,80 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
 
-                  // FAB inside the phone frame
-                  if (_selectedIndex != 1)
+                  // Floating Plus Button
+                  Positioned(
+                    bottom: 100,
+                    right: 20,
+                    child: FloatingActionButton(
+                      backgroundColor: const Color(0xFF667eea),
+                      onPressed: _toggleFloatingOptions,
+                      shape: const CircleBorder(),
+                      child: Icon(
+                        _showFloatingOptions ? Icons.close : Icons.add,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+
+                  // Floating Options Menu (inside phone frame)
+                  if (_showFloatingOptions)
                     Positioned(
-                      bottom: 80 - 30, // half-over the bottom bar
-                      left: 0,
-                      right: 0,
-                      child: Center(
-                        child: FloatingActionButton(
-                          backgroundColor: const Color(0xFF667eea),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const JournalPage()),
-                            );
-                          },
-                          shape: const CircleBorder(),
-                          child: const Text(
-                            '✏️',
-                            style: TextStyle(fontSize: 24, color: Colors.white),
-                          ),
+                      bottom: 180,
+                      right: 20,
+                      child: Container(
+                        width: 200,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _buildOptionItem(
+                              icon: Icons.edit,
+                              title: 'Add Journal Entry',
+                              subtitle: 'Write about your day',
+                              onTap: () {
+                                setState(() {
+                                  _showFloatingOptions = false;
+                                });
+                                // TODO: Navigate to journal entry page
+                                print('Add Journal Entry');
+                              },
+                            ),
+                            _buildOptionItem(
+                              icon: Icons.track_changes,
+                              title: 'Track Habit',
+                              subtitle: 'Monitor your habits',
+                              onTap: () {
+                                setState(() {
+                                  _showFloatingOptions = false;
+                                });
+                                // TODO: Navigate to habit tracking page
+                                print('Track Habit');
+                              },
+                            ),
+                            _buildOptionItem(
+                              icon: Icons.share,
+                              title: 'Share Post',
+                              subtitle: 'Share with community',
+                              onTap: () {
+                                setState(() {
+                                  _showFloatingOptions = false;
+                                });
+                                // TODO: Navigate to share post page
+                                print('Share Post');
+                              },
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -160,6 +226,59 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOptionItem({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFF667eea).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                icon,
+                color: const Color(0xFF667eea),
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -184,10 +303,12 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 4),
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF667eea),
+                color: _selectedIndex == index 
+                    ? const Color(0xFF667eea)
+                    : Colors.grey,
               ),
             ),
           ],
