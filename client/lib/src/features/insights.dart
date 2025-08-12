@@ -241,7 +241,7 @@ class InsightsPage extends StatelessWidget {
                 ),
               ),
             ),
-          ),
+          git checkout Nancy          ),
         ),
       ),
     );
