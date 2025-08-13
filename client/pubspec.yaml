@@ -44,11 +44,21 @@ dependencies:
   # flutter_sound: ^9.2.0
   permission_handler: ^10.2.0
 
-  path_provider: ^2.1.0  # Add if using iOS path (optional)
+  http: ^1.1.0
+  cached_network_image: ^3.2.3
+  flutter_spinkit: ^5.2.0
+  # record: ^4.4.4
+  audioplayers: ^6.0.0
+  path_provider: ^2.1.1
+  file_picker: ^5.2.0
+  health: ^13.1.1
+  intl: ^0.20.0
+  universal_html: ^2.2.4
+  google_fonts: ^6.1.0
+
   supabase_flutter: ^2.5.8
   flutter_dotenv: ^5.1.0
-  audioplayers: ^6.1.0
-  file_picker: ^8.0.0
+audioplayers: ^6.0.0
   # audio_recorder: ^1.0.2
   # flutter_sound: ^9.28.13  # Use a stable version prior to 9.28.0 if needed
   # web: ^0.3.0

@@ -32,37 +32,43 @@ class _JournalPageState extends State<JournalPage> {
   final Map<DateTime, JournalEntry> journalEntries = {
     DateTime(2025, 8, 3): JournalEntry(
       title: 'Feeling overwhelmed today',
-      content: 'Today was really challenging. I had multiple meetings and deadlines that made me feel stressed. The weather was gloomy which didn\'t help my mood either.',
+      content:
+          'Today was really challenging. I had multiple meetings and deadlines that made me feel stressed. The weather was gloomy which didn\'t help my mood either.',
       time: '14:30',
       mood: '😟',
     ),
     DateTime(2025, 8, 5): JournalEntry(
       title: 'Missing my family',
-      content: 'I\'ve been thinking about home a lot today. Sometimes living alone gets lonely, even though I enjoy my independence. I should call mom tomorrow.',
+      content:
+          'I\'ve been thinking about home a lot today. Sometimes living alone gets lonely, even though I enjoy my independence. I should call mom tomorrow.',
       time: '20:15',
       mood: '😢',
     ),
     DateTime(2025, 8, 7): JournalEntry(
       title: 'Productive morning',
-      content: 'Woke up early and got a lot done before noon. The morning routine really sets the tone for the day. Feeling accomplished and ready for what\'s next.',
+      content:
+          'Woke up early and got a lot done before noon. The morning routine really sets the tone for the day. Feeling accomplished and ready for what\'s next.',
       time: '11:45',
       mood: '🙂',
     ),
     DateTime(2025, 8, 8): JournalEntry(
       title: 'Great coffee date',
-      content: 'Met with Sarah for coffee and we talked for hours. It\'s amazing how good conversations can lift your spirits. We should do this more often.',
+      content:
+          'Met with Sarah for coffee and we talked for hours. It\'s amazing how good conversations can lift your spirits. We should do this more often.',
       time: '16:20',
       mood: '😊',
     ),
     DateTime(2025, 8, 12): JournalEntry(
       title: 'The way those leaves fell',
-      content: 'Walking through the park today, I noticed how beautifully the leaves were falling. It reminded me that change can be beautiful, even when it feels like an ending.',
+      content:
+          'Walking through the park today, I noticed how beautifully the leaves were falling. It reminded me that change can be beautiful, even when it feels like an ending.',
       time: '18:35',
       mood: '🙂',
     ),
     DateTime(2025, 8, 16): JournalEntry(
       title: 'A Day of Mixed Feelings',
-      content: 'Today was a rollercoaster of emotions. Started with a burst of energy, then a dip in the afternoon, and finally a calm evening. Trying to understand these shifts.',
+      content:
+          'Today was a rollercoaster of emotions. Started with a burst of energy, then a dip in the afternoon, and finally a calm evening. Trying to understand these shifts.',
       time: '12:09',
       mood: '😊',
     ),
@@ -94,7 +100,7 @@ class _JournalPageState extends State<JournalPage> {
 
   void _showJournalEntry(DateTime date) {
     final entry = journalEntries[DateTime(date.year, date.month, date.day)];
-    
+
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -134,7 +140,7 @@ class _JournalPageState extends State<JournalPage> {
                     ],
                   ),
                 ),
-                
+
                 // Content
                 Flexible(
                   child: SingleChildScrollView(
@@ -166,14 +172,16 @@ class _JournalPageState extends State<JournalPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
                                 decoration: BoxDecoration(
                                   color: Colors.grey.shade100,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Row(
                                   children: [
-                                    Text(entry.mood, style: const TextStyle(fontSize: 20)),
+                                    Text(entry.mood,
+                                        style: const TextStyle(fontSize: 20)),
                                     const SizedBox(width: 8),
                                     Text(
                                       entry.time,
@@ -193,7 +201,8 @@ class _JournalPageState extends State<JournalPage> {
                                   _showInsights(entry, date);
                                 },
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 8),
                                   decoration: BoxDecoration(
                                     color: const Color(0xFF667eea),
                                     borderRadius: BorderRadius.circular(20),
@@ -235,11 +244,16 @@ class _JournalPageState extends State<JournalPage> {
                             ),
                           ),
                           const SizedBox(height: 20),
+                          // here
                           ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pop();
-                              // TODO: Navigate to new entry page
-                              print('Create new entry for ${_formatDate(date)}');
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const NewEntryScreen(),
+                                ),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF667eea),
@@ -284,8 +298,18 @@ class _JournalPageState extends State<JournalPage> {
 
   String _formatDate(DateTime date) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
     ];
     return '${months[date.month - 1]} ${date.day}, ${date.year}';
   }
@@ -302,14 +326,16 @@ class _JournalPageState extends State<JournalPage> {
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade200,
                     borderRadius: BorderRadius.circular(24),
                   ),
                   child: Row(
                     children: const [
-                      Text('LIGHT', style: TextStyle(fontWeight: FontWeight.w600)),
+                      Text('LIGHT',
+                          style: TextStyle(fontWeight: FontWeight.w600)),
                       SizedBox(width: 6),
                       Icon(Icons.wb_sunny_outlined, size: 18),
                     ],
@@ -333,7 +359,10 @@ class _JournalPageState extends State<JournalPage> {
                   child: const Icon(Icons.notifications_none),
                 ),
                 const SizedBox(width: 12),
-                const CircleAvatar(radius: 22, backgroundColor: Color(0xFFFFC045), child: Icon(Icons.person, color: Colors.black)),
+                const CircleAvatar(
+                    radius: 22,
+                    backgroundColor: Color(0xFFFFC045),
+                    child: Icon(Icons.person, color: Colors.black)),
               ],
             ),
             const SizedBox(height: 14),
@@ -365,9 +394,12 @@ class _JournalPageState extends State<JournalPage> {
                   titleTextFormatter: (date, locale) {
                     return '${_monthName(date.month)} ${date.year}';
                   },
-                  leftChevronIcon: const Icon(Icons.arrow_back_ios_new, size: 18, color: Colors.black87),
-                  rightChevronIcon: const Icon(Icons.arrow_forward_ios, size: 18, color: Colors.black87),
-                  titleTextStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                  leftChevronIcon: const Icon(Icons.arrow_back_ios_new,
+                      size: 18, color: Colors.black87),
+                  rightChevronIcon: const Icon(Icons.arrow_forward_ios,
+                      size: 18, color: Colors.black87),
+                  titleTextStyle: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w700),
                   headerPadding: const EdgeInsets.only(top: 4, bottom: 8),
                 ),
                 daysOfWeekStyle: const DaysOfWeekStyle(
@@ -460,8 +492,18 @@ class _JournalPageState extends State<JournalPage> {
 
   String _monthName(int month) {
     const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
     ];
     return months[month - 1];
   }
@@ -534,7 +576,8 @@ class _RecentEntryTile extends StatelessWidget {
               children: [
                 Text(
                   entry.title,
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -546,9 +589,13 @@ class _RecentEntryTile extends StatelessWidget {
                 const SizedBox(height: 6),
                 Row(
                   children: [
-                    Text(entry.time, style: const TextStyle(fontSize: 12, color: Colors.black54)),
+                    Text(entry.time,
+                        style: const TextStyle(
+                            fontSize: 12, color: Colors.black54)),
                     const SizedBox(width: 8),
-                    Text(entry.date, style: const TextStyle(fontSize: 12, color: Colors.black45)),
+                    Text(entry.date,
+                        style: const TextStyle(
+                            fontSize: 12, color: Colors.black45)),
                   ],
                 ),
               ],

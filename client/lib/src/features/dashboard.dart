@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '/src/core/config/comic_api.dart';
+import '/src/core/models/comic_response.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -9,13 +13,6 @@ class DashboardPage extends StatelessWidget {
     Share.share(
       'Check out my mood trends this week! 📈 Feeling great!',
       subject: 'My Mood Trends',
-    );
-  }
-
-  void _shareWeeklySummary() {
-    Share.share(
-      'Here\'s my weekly summary from the Journal App! 🎨',
-      subject: 'My Weekly Summary',
     );
   }
 
@@ -55,7 +52,12 @@ class DashboardPage extends StatelessWidget {
             const SizedBox(height: 20),
             
             // Weekly Summary Section
-            _buildWeeklySummarySection(),
+            _WeeklySummarySection(
+              onNavigate: _navigateToWeeklySummary,
+              onShare: () {
+                // Will be implemented in the StatefulWidget
+              },
+            ),
           ],
         ),
       ),
@@ -451,8 +453,70 @@ class DashboardPage extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildWeeklySummarySection() {
+class _WeeklySummarySection extends StatefulWidget {
+  final VoidCallback onNavigate;
+  final VoidCallback onShare;
+
+  const _WeeklySummarySection({
+    required this.onNavigate,
+    required this.onShare,
+  });
+
+  @override
+  __WeeklySummarySectionState createState() => __WeeklySummarySectionState();
+}
+
+class __WeeklySummarySectionState extends State<_WeeklySummarySection> {
+  ComicApi comicApi = ComicApi();
+  ComicResponse? comicResponse;
+  bool isLoading = false;
+  String errorMessage = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchComic();
+  }
+
+  Future<void> _fetchComic() async {
+    setState(() {
+      isLoading = true;
+      errorMessage = '';
+    });
+
+    try {
+      const prompt =
+          'Here is your weekly summary, presented as a manga-style comic strip. An astronaut floats peacefully before the large, sweeping window of the ISS. The face, full of quiet awe, is illuminated by the brilliant blue and white swirl of the Earth below...';
+      comicResponse = await comicApi.generateComic(prompt);
+    } catch (e) {
+      setState(() {
+        errorMessage = 'Failed to load comic: $e';
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  void _shareWeeklySummary() {
+    if (comicResponse != null) {
+      Share.share(
+        'Here\'s my weekly summary comic! 🎨 ${comicResponse!.imagePath}',
+        subject: 'My Weekly Summary',
+      );
+    } else {
+      Share.share(
+        'Here\'s my weekly summary from the Journal App! 🎨',
+        subject: 'My Weekly Summary',
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -474,7 +538,7 @@ class DashboardPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'Your Weekly summary',
+                'Your Weekly Summary',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -500,7 +564,7 @@ class DashboardPage extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           GestureDetector(
-            onTap: _navigateToWeeklySummary,
+            onTap: widget.onNavigate,
             child: Container(
               height: 200,
               decoration: BoxDecoration(
@@ -508,78 +572,80 @@ class DashboardPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: Colors.grey[300]!),
               ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Comic book/journal pages illustration
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildComicPage(0),
-                        const SizedBox(width: 8),
-                        _buildComicPage(1),
-                        const SizedBox(width: 8),
-                        _buildComicPage(2),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Tap to view your weekly summary',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.w500,
+              child: isLoading
+                  ? const Center(
+                      child: SpinKitFadingCircle(
+                        color: Color(0xFF667eea),
+                        size: 50.0,
                       ),
-                    ),
-                  ],
+                    )
+                  : errorMessage.isNotEmpty
+                      ? Center(
+                          child: Text(
+                            errorMessage,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.red,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      : comicResponse != null
+                          ? CachedNetworkImage(
+                              imageUrl: comicResponse!.imagePath,
+                              placeholder: (context, url) => const Center(
+                                child: SpinKitFadingCircle(
+                                  color: Color(0xFF667eea),
+                                  size: 50.0,
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => const Center(
+                                child: Text(
+                                  'Failed to load image',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                              fit: BoxFit.cover,
+                            )
+                          : const Center(
+                              child: Text(
+                                '🎨 AI-Generated Comic Summary',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontStyle: FontStyle.italic,
+                                  color: Color(0xFF666666),
+                                ),
+                              ),
+                            ),
+            ),
+          ),
+          const SizedBox(height: 15),
+          Center(
+            child: ElevatedButton(
+              onPressed: widget.onNavigate,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF667eea),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
+              ),
+              child: const Text(
+                'View Full Summary',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildComicPage(int index) {
-    return Container(
-      width: 60,
-      height: 80,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey[400]!),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 4,
-            offset: Offset(index * 2.0, index * 2.0),
-          ),
-        ],
-      ),
-      child: Column(
-        children: List.generate(4, (i) {
-          return Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(2),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(2),
-              ),
-              child: Center(
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[400],
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            ),
-          );
-        }),
       ),
     );
   }
