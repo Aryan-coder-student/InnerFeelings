@@ -221,6 +221,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                 print('Share Post');
                               },
                             ),
+                            _buildOptionItem(
+                              icon: Icons.edit,
+                              title: 'Proffessional Care',
+                              subtitle: 'Ask specialists',
+                              onTap: () {
+                                setState(() {
+                                  _showFloatingOptions = false;
+                                });
+                                // TODO: Navigate to share post page
+                                print('Share Post');
+                              },
+                            ),
                           ],
                         ),
                       ),
