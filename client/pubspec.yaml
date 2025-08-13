@@ -58,7 +58,7 @@ dependencies:
 
   supabase_flutter: ^2.5.8
   flutter_dotenv: ^5.1.0
-audioplayers: ^6.0.0
+  provider: ^6.1.1
   # audio_recorder: ^1.0.2
   # flutter_sound: ^9.28.13  # Use a stable version prior to 9.28.0 if needed
   # web: ^0.3.0

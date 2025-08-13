@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // import 'package:share_plus/share_plus.dart';
 
@@ -10,6 +11,11 @@ import './src/features/avatar.dart';
 import './src/features/community.dart';
 import './src/features/splash_screen.dart';
 import './src/features/habits.dart';
+import './src/features/onboarding/onboarding.dart';
+import './src/core/services/onboarding_service.dart';
+ import './src/features/care/screens/professional_care_screen.dart';
+ import './src/features/care/screens/provider_details_screen.dart';
+ import './src/features/care/screens/checkout_screen.dart';
 
 void main() {
   runApp(const InnerFeeling());
@@ -20,14 +26,23 @@ class InnerFeeling extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'InnerFeeling',
-      theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Roboto'),
-      home: const SplashScreen(),
-      routes: {
-        '/home': (context) => const HomeScreen(),
-        '/login': (context) => const HomeScreen(), // For now, redirect to home
-      },
+    return ChangeNotifierProvider(
+      create: (context) => OnboardingService(),
+      child: MaterialApp(
+        title: 'InnerFeeling',
+        theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Roboto'),
+        home: const SplashScreen(),
+        routes: {
+          '/home': (context) => const HomeScreen(),
+          '/login': (context) => const HomeScreen(), // For now, redirect to home
+          '/onboarding-1': (context) => const OnboardingScreen1(),
+          '/onboarding-2': (context) => const OnboardingScreen2(),
+          '/onboarding-3': (context) => const OnboardingScreen3(),
+          '/care': (context) => const ProfessionalCareScreen(),
+          '/care/provider': (context) => const ProviderDetailsScreen(),
+          '/care/checkout': (context) => const CareCheckoutScreen(),
+        },
+      ),
     );
   }
 }
@@ -219,6 +234,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 });
                                 // TODO: Navigate to share post page
                                 print('Share Post');
+                              },
+                            ),
+                            _buildOptionItem(
+                              icon: Icons.edit,
+                              title: 'Proffessional Care',
+                              subtitle: 'Ask specialists',
+                              onTap: () {
+                                setState(() {
+                                  _showFloatingOptions = false;
+                                });
+                                Navigator.pushNamed(context, '/care');
                               },
                             ),
                           ],

@@ -81,8 +81,8 @@ class SplashScreen extends StatelessWidget {
                                         width: double.infinity,
                                         child: ElevatedButton(
                                           onPressed: () {
-                                            // Navigate to home screen
-                                            Navigator.pushReplacementNamed(context, '/home');
+                                            // Navigate to first onboarding question
+                                            Navigator.pushReplacementNamed(context, '/onboarding-1');
                                           },
                                           style: ElevatedButton.styleFrom(
                                             padding: const EdgeInsets.symmetric(vertical: 16),
@@ -106,8 +106,8 @@ class SplashScreen extends StatelessWidget {
                                         width: double.infinity,
                                         child: OutlinedButton(
                                           onPressed: () {
-                                            // Navigate to home screen
-                                            Navigator.pushReplacementNamed(context, '/home');
+                                            // Navigate to first onboarding question
+                                            Navigator.pushReplacementNamed(context, '/onboarding-1');
                                           },
                                           style: OutlinedButton.styleFrom(
                                             padding: const EdgeInsets.symmetric(vertical: 16),

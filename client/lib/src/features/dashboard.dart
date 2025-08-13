@@ -127,17 +127,17 @@ class DashboardPage extends StatelessWidget {
             offset: const Offset(0, 4),
           ),
         ],
-      ),
-      child: Column(
+              ),
+              child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
                 'Weekly mood',
-                style: TextStyle(
-                  fontSize: 18,
+                        style: TextStyle(
+                          fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
@@ -151,7 +151,7 @@ class DashboardPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Icon(
-                    Icons.share,
+                        Icons.share,
                     color: Colors.white,
                     size: 16,
                   ),
@@ -270,7 +270,7 @@ class DashboardPage extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          Container(
+            Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.2),
@@ -290,7 +290,7 @@ class DashboardPage extends StatelessWidget {
   Widget _buildStressLevelCard() {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
+              decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
@@ -530,17 +530,17 @@ class __WeeklySummarySectionState extends State<_WeeklySummarySection> {
             offset: const Offset(0, 4),
           ),
         ],
-      ),
-      child: Column(
+              ),
+              child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
                 'Your Weekly Summary',
-                style: TextStyle(
-                  fontSize: 18,
+                        style: TextStyle(
+                          fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
@@ -554,20 +554,20 @@ class __WeeklySummarySectionState extends State<_WeeklySummarySection> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Icon(
-                    Icons.share,
+                        Icons.share,
                     color: Colors.white,
                     size: 16,
                   ),
                 ),
-              ),
-            ],
-          ),
+                      ),
+                    ],
+                  ),
           const SizedBox(height: 20),
           GestureDetector(
             onTap: widget.onNavigate,
             child: Container(
-              height: 200,
-              decoration: BoxDecoration(
+                    height: 200,
+                    decoration: BoxDecoration(
                 color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: Colors.grey[300]!),
@@ -611,39 +611,39 @@ class __WeeklySummarySectionState extends State<_WeeklySummarySection> {
                               fit: BoxFit.cover,
                             )
                           : const Center(
-                              child: Text(
-                                '🎨 AI-Generated Comic Summary',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontStyle: FontStyle.italic,
-                                  color: Color(0xFF666666),
+                      child: Text(
+                        '🎨 AI-Generated Comic Summary',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontStyle: FontStyle.italic,
+                          color: Color(0xFF666666),
                                 ),
-                              ),
-                            ),
-            ),
-          ),
-          const SizedBox(height: 15),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
           Center(
             child: ElevatedButton(
               onPressed: widget.onNavigate,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF667eea),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 12,
-                ),
-              ),
-              child: const Text(
-                'View Full Summary',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF667eea),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                    ),
+                    child: const Text(
+                      'View Full Summary',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
           ),
         ],
       ),
