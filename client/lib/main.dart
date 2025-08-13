@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // import 'package:share_plus/share_plus.dart';
 
@@ -8,6 +9,13 @@ import './src/features/journal.dart';
 
 import './src/features/avatar.dart';
 import './src/features/community.dart';
+import './src/features/splash_screen.dart';
+import './src/features/habits.dart';
+import './src/features/onboarding/onboarding.dart';
+import './src/core/services/onboarding_service.dart';
+ import './src/features/care/screens/professional_care_screen.dart';
+ import './src/features/care/screens/provider_details_screen.dart';
+ import './src/features/care/screens/checkout_screen.dart';
 
 void main() {
   runApp(const InnerFeeling());
@@ -18,10 +26,23 @@ class InnerFeeling extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'InnerFeeling',
-      theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Roboto'),
-      home: const HomeScreen(),
+    return ChangeNotifierProvider(
+      create: (context) => OnboardingService(),
+      child: MaterialApp(
+        title: 'InnerFeeling',
+        theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Roboto'),
+        home: const SplashScreen(),
+        routes: {
+          '/home': (context) => const HomeScreen(),
+          '/login': (context) => const HomeScreen(), // For now, redirect to home
+          '/onboarding-1': (context) => const OnboardingScreen1(),
+          '/onboarding-2': (context) => const OnboardingScreen2(),
+          '/onboarding-3': (context) => const OnboardingScreen3(),
+          '/care': (context) => const ProfessionalCareScreen(),
+          '/care/provider': (context) => const ProviderDetailsScreen(),
+          '/care/checkout': (context) => const CareCheckoutScreen(),
+        },
+      ),
     );
   }
 }
@@ -35,17 +56,25 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  bool _showFloatingOptions = false;
   final List<String> _pages = [
     'dashboard',
     // 'new_entry',
     'journal',
     'avatar',
+    'habits',
     'community'
   ];
 
   void _showPage(int index) {
     setState(() {
       _selectedIndex = index;
+    });
+  }
+
+  void _toggleFloatingOptions() {
+    setState(() {
+      _showFloatingOptions = !_showFloatingOptions;
     });
   }
 
@@ -127,32 +156,98 @@ class _HomeScreenState extends State<HomeScreen> {
                           _buildNavItem(0, '📊', 'Dashboard'),
                           _buildNavItem(1, '📖', 'Journal'),
                           _buildNavItem(2, '🤖', 'Luna'),
-                          _buildNavItem(3, '👥', 'Community'),
+                          _buildNavItem(3, '🏋️', 'Habits'),
+                          _buildNavItem(4, '👥', 'Community'),
                         ],
                       ),
                     ),
                   ),
 
-                  // FAB inside the phone frame
-                  if (_selectedIndex != 1)
+                  // Floating Plus Button
+                  Positioned(
+                    bottom: 100,
+                    right: 20,
+                    child: FloatingActionButton(
+                      backgroundColor: const Color(0xFF667eea),
+                      onPressed: _toggleFloatingOptions,
+                      shape: const CircleBorder(),
+                      child: Icon(
+                        _showFloatingOptions ? Icons.close : Icons.add,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+
+                  // Floating Options Menu (inside phone frame)
+                  if (_showFloatingOptions)
                     Positioned(
-                      bottom: 80 - 30, // half-over the bottom bar
-                      left: 0,
-                      right: 0,
-                      child: Center(
-                        child: FloatingActionButton(
-                          backgroundColor: const Color(0xFF667eea),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const JournalPage()),
-                            );
-                          },
-                          shape: const CircleBorder(),
-                          child: const Text(
-                            '✏️',
-                            style: TextStyle(fontSize: 24, color: Colors.white),
-                          ),
+                      bottom: 180,
+                      right: 20,
+                      child: Container(
+                        width: 200,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _buildOptionItem(
+                              icon: Icons.edit,
+                              title: 'Add Journal Entry',
+                              subtitle: 'Write about your day',
+                              onTap: () {
+                                setState(() {
+                                  _showFloatingOptions = false;
+                                });
+                                // TODO: Navigate to journal entry page
+                                print('Add Journal Entry');
+                              },
+                            ),
+                            _buildOptionItem(
+                              icon: Icons.track_changes,
+                              title: 'Track Habit',
+                              subtitle: 'Monitor your habits',
+                              onTap: () {
+                                setState(() {
+                                  _showFloatingOptions = false;
+                                });
+                                // TODO: Navigate to habit tracking page
+                                print('Track Habit');
+                              },
+                            ),
+                            _buildOptionItem(
+                              icon: Icons.share,
+                              title: 'Share Post',
+                              subtitle: 'Share with community',
+                              onTap: () {
+                                setState(() {
+                                  _showFloatingOptions = false;
+                                });
+                                // TODO: Navigate to share post page
+                                print('Share Post');
+                              },
+                            ),
+                            _buildOptionItem(
+                              icon: Icons.edit,
+                              title: 'Proffessional Care',
+                              subtitle: 'Ask specialists',
+                              onTap: () {
+                                setState(() {
+                                  _showFloatingOptions = false;
+                                });
+                                Navigator.pushNamed(context, '/care');
+                              },
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -160,6 +255,59 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOptionItem({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFF667eea).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                icon,
+                color: const Color(0xFF667eea),
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -184,10 +332,12 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 4),
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF667eea),
+                color: _selectedIndex == index 
+                    ? const Color(0xFF667eea)
+                    : Colors.grey,
               ),
             ),
           ],
@@ -204,6 +354,8 @@ class _HomeScreenState extends State<HomeScreen> {
         return const JournalPage();
       case 'avatar':
         return const AvatarPage();
+      case 'habits':
+        return const HabitsPage();
       case 'community':
         return const CommunityPage();
       default:
